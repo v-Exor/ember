@@ -1,6 +1,6 @@
 # Laboratory 5 validation
 
-Validated locally on 16 October 2026 against the supplied Laboratory Exercise 5 Word document and the actual LFW PCA/SVM implementation from this conversation. Publishing was subsequently authorized on 17 October 2026 for `v-Exor/LabAct5_CSST106`.
+Validated locally on 16 October 2026 against the supplied Laboratory Exercise 5 Word document and the actual LFW PCA/SVM implementation from this conversation. Publishing was subsequently authorized on 17 October 2026 for `v-Exor/ember`.
 
 ## Numerical verification
 
@@ -36,14 +36,14 @@ The desktop landing page, mobile landing page, live projection, and live result 
 
 The GitHub Pages workflow stages only static runtime assets, source downloads, and documentation. No API keys, runtime backend, remote fonts, CDN scripts, or other laboratory repositories are required. The source delivery ZIP excludes `node_modules`, test results, QA artifacts, local caches, and Git state.
 
-The repository destination in `site-config.js` points to `https://github.com/v-Exor/LabAct5_CSST106`. The compilation destination remains empty until the compilation website is online; that button opens working configuration controls instead of a broken placeholder page. Production verification is recorded below.
+The repository destination in `site-config.js` points to `https://github.com/v-Exor/ember`. The compilation destination remains empty until the compilation website is online; that button opens working configuration controls instead of a broken placeholder page. Production verification is recorded below.
 
 ## Production deployment verification on 17 October 2026
 
-- Public repository: https://github.com/v-Exor/LabAct5_CSST106
-- Live website: https://v-exor.github.io/LabAct5_CSST106/
+- Public repository: https://github.com/v-Exor/ember
+- Live website: https://v-exor.github.io/ember/
 - Initial deployed code commit: `26188950d610e2464b06ad3651777bf5a8925d37`.
-- Initial Pages workflow: https://github.com/v-Exor/LabAct5_CSST106/actions/runs/39031985661 — completed successfully.
+- Initial Pages workflow: https://github.com/v-Exor/ember/actions/runs/39031985661 — completed successfully.
 - Verified 23 public HTTP resources, including the page, printable report, scripts, styles, figures, Python downloads, manifest, model binary, and pixel binary.
 - Deployed index, report, and manifest match the local versions; both numerical binaries match the manifest's SHA-256 hashes.
 - All 258 predictions calculated from the publicly downloaded model and pixels match the Python reference, with 219 correct and 84.8837% accuracy.
