@@ -36,7 +36,22 @@ The desktop landing page, mobile landing page, live projection, and live result 
 
 The GitHub Pages workflow stages only static runtime assets, source downloads, and documentation. No API keys, runtime backend, remote fonts, CDN scripts, or other laboratory repositories are required. The source delivery ZIP excludes `node_modules`, test results, QA artifacts, local caches, and Git state.
 
-The repository destination in `site-config.js` points to `https://github.com/v-Exor/LabAct5_CSST106`. The compilation destination remains empty until the compilation website is online; that button opens working configuration controls instead of a broken placeholder page. Production deployment verification is recorded separately after publication.
+The repository destination in `site-config.js` points to `https://github.com/v-Exor/LabAct5_CSST106`. The compilation destination remains empty until the compilation website is online; that button opens working configuration controls instead of a broken placeholder page. Production verification is recorded below.
+
+## Production deployment verification on 17 October 2026
+
+- Public repository: https://github.com/v-Exor/LabAct5_CSST106
+- Live website: https://v-exor.github.io/LabAct5_CSST106/
+- Initial deployed code commit: `26188950d610e2464b06ad3651777bf5a8925d37`.
+- Initial Pages workflow: https://github.com/v-Exor/LabAct5_CSST106/actions/runs/39031985661 — completed successfully.
+- Verified 23 public HTTP resources, including the page, printable report, scripts, styles, figures, Python downloads, manifest, model binary, and pixel binary.
+- Deployed index, report, and manifest match the local versions; both numerical binaries match the manifest's SHA-256 hashes.
+- All 258 predictions calculated from the publicly downloaded model and pixels match the Python reference, with 219 correct and 84.8837% accuracy.
+- The publicly downloaded variance values first reach 90% at component 85.
+- The printable report contains all nine answers, and the published configuration contains the real repository link.
+- Corrected cache ignore rules so required `assets/data` files are included in Git. Development dependencies, QA artifacts, original dataset caches, and Git metadata are excluded from the source delivery ZIP.
+
+Run `node scripts/verify-deployment.mjs` to repeat these HTTP and numerical production checks. It writes its local verification record to ignored `artifacts/deployment-verification.json`. This production check uses public HTTP downloads and the same numerical implementation previously tested in Chrome; no automation of the user's signed-in browser is required.
 
 ## Technical limits
 

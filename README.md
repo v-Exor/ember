@@ -7,9 +7,11 @@ The primary source is `CSST106_Lab_Experiment_05_PCA_in_CV.docx`, supplied in th
 ## GitHub location
 
 - Repository: https://github.com/v-Exor/LabAct5_CSST106
-- GitHub Pages deployment URL: https://v-exor.github.io/LabAct5_CSST106/
+- Live GitHub Pages website: https://v-exor.github.io/LabAct5_CSST106/
 - Use the Pages URL as the destination of your compilation website's Laboratory Activity 5 button.
 - The repository link is configured in `site-config.js`. The compilation return URL remains configurable until your compilation website is online.
+
+Published and verified on 17 October 2026. The GitHub Pages workflow completed successfully. The deployed model and pixels match the local SHA-256 hashes, and all 258 predictions agree with Python. See `VALIDATION.md` for details. To recheck the public site, run `node scripts/verify-deployment.mjs`.
 
 ## Quick start
 
