@@ -271,14 +271,6 @@ document.querySelectorAll('[data-canvas]').forEach(button => button.addEventList
 $('download-weights').addEventListener('click', () => { if (!state.scores) return; const text = 'component,weight,whitened\n' + Array.from(state.scores, (weight, i) => `${i + 1},${weight},${$('whiten').checked}`).join('\n'); saveText(text, 'lab05-pca-weights.csv', 'text/csv'); });
 $('download-evaluation').addEventListener('click', async () => { try { const manifest = await loadManifest(); saveText(JSON.stringify({ laboratory: 5, source: state.report ? 'live-browser-evaluation' : 'saved-python-reference', settings: manifest.settings, names: manifest.names, testIndices: manifest.testIndices, predictions: state.predictions || manifest.results.predictions, report: state.report || P.evaluate(manifest.testIndices.map(i => manifest.labels[i]), manifest.results.predictions, 7) }, null, 2), 'lab05-evaluation.json', 'application/json'); } catch (error) { toast(error.message); } });
 
-// One complete source download, plus the original task-specific sections.
-checkedFetch('./python/lab5_pca.py').then(r => r.text()).then(text => {
-  state.python = text; $('python-code').textContent = text;
-  const sections = text.split(/(?=^# %% )/m).filter(Boolean);
-  document.querySelectorAll('[data-source-part]').forEach(el => { el.textContent = sections[Number(el.dataset.sourcePart) - 1] || text; });
-}).catch(() => { $('python-code').textContent = 'Source could not be loaded. Use the Python file download link.'; });
-$('copy-code').addEventListener('click', async () => { if (!state.python) { toast('Use the Python file download; the code preview has not loaded.'); return; } try { await navigator.clipboard.writeText(state.python); toast('Complete Python implementation copied.'); } catch { toast('Clipboard unavailable. Select the source text or download the Python file.'); } });
-
 // Navigation, accessible motion, and local-only notes.
 $('menu-toggle').addEventListener('click', () => { const opened = $('menu-toggle').getAttribute('aria-expanded') !== 'true'; $('menu-toggle').setAttribute('aria-expanded', String(opened)); $('menu-toggle').setAttribute('aria-label', opened ? 'Close navigation' : 'Open navigation'); $('main-nav').classList.toggle('open', opened); });
 document.querySelectorAll('#main-nav a').forEach(anchor => anchor.addEventListener('click', () => { $('main-nav').classList.remove('open'); $('menu-toggle').setAttribute('aria-expanded', 'false'); $('menu-toggle').setAttribute('aria-label', 'Open navigation'); }));
@@ -292,15 +284,14 @@ $('lab-notes').value = safeRead('visionlab-lab05-notes') || '';
 $('lab-notes').addEventListener('input', () => { $('notes-status').textContent = safeWrite('visionlab-lab05-notes', $('lab-notes').value) ? 'Saved in this browser.' : 'Storage unavailable. Download your notes to keep them.'; });
 $('download-notes').addEventListener('click', () => saveText(`CSST106 Laboratory 5 — PCA\n\n${$('lab-notes').value}`, 'lab05-observations.txt'));
 
-// Configurable external destinations; no guessed usernames or placeholder links.
-let storedLinks = {}; try { storedLinks = JSON.parse(safeRead('visionlab-lab05-links') || '{}'); } catch {}
-const links = { compilationUrl: '', repositoryUrl: '', ...window.LAB_CONFIG, ...storedLinks };
-function validLink(value) { if (!value.trim()) return ''; const url = new URL(value); if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) throw new Error('Use an http:// or https:// URL without embedded credentials.'); return url.href; }
-function openLinks(destination) { $('compilation-url').value = links.compilationUrl; $('repository-url').value = links.repositoryUrl; $('link-error').hidden = true; $('link-dialog').showModal(); if (destination) $(destination === 'compilation' ? 'compilation-url' : 'repository-url').focus(); }
-function readLinks() { return { compilationUrl: validLink($('compilation-url').value), repositoryUrl: validLink($('repository-url').value) }; }
-document.querySelectorAll('[data-destination]').forEach(button => button.addEventListener('click', () => { const value = links[`${button.dataset.destination}Url`]; try { if (value) window.open(validLink(value), '_blank', 'noopener,noreferrer'); else openLinks(button.dataset.destination); } catch { openLinks(button.dataset.destination); } }));
-$('open-settings').addEventListener('click', () => openLinks()); $('close-dialog').addEventListener('click', () => $('link-dialog').close());
-$('link-form').addEventListener('submit', event => { event.preventDefault(); try { Object.assign(links, readLinks()); const saved = safeWrite('visionlab-lab05-links', JSON.stringify(links)); $('link-dialog').close(); toast(saved ? 'Links saved in this browser. Download the config to apply them for all visitors.' : 'Links applied for this session. Download the config to keep them.'); } catch (error) { $('link-error').textContent = error.message; $('link-error').hidden = false; } });
-$('download-config').addEventListener('click', () => { try { const config = readLinks(); saveText(`// Your Lab 5 website destinations.\nwindow.LAB_CONFIG = ${JSON.stringify(config, null, 2)};\n`, 'site-config.js', 'text/javascript'); } catch (error) { $('link-error').textContent = error.message; $('link-error').hidden = false; } });
+// Public navigation exposes the compilation destination only.
+document.querySelectorAll('[data-destination="compilation"]').forEach(button => button.addEventListener('click', () => {
+  try {
+    const url = new URL(window.LAB_CONFIG?.compilationUrl || '');
+    if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) throw new Error('Invalid compilation address.');
+    window.open(url.href, '_blank', 'noopener,noreferrer');
+  } catch { toast('The compilation link is not configured.'); }
+}));
+
 loadManifest().catch(() => { $('report-badge').textContent = 'SAVED VALUES · DATA OFFLINE'; });
 window.addEventListener('pagehide', () => state.worker?.terminate());
