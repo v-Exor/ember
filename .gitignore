@@ -1,0 +1,9 @@
+node_modules/
+test-results/
+artifacts/
+__pycache__/
+/data/
+/python/data/
+outputs/
+.venv/
+*.pyc
